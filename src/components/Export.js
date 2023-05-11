@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Papa from 'papaparse';
 import { saveAs } from 'file-saver';
 
-function Export( {resultsheet, tags} ) {
+function Export( {resultsheet, tags, n_ques} ) {
 
     const [student_id, setStudent_id] = useState();
     // let finalresult = [];
@@ -45,11 +45,11 @@ function Export( {resultsheet, tags} ) {
     const exportCsv = () => {
         let newresult = []
 
-        for(let i = 1 ; i <= tags.length ; i++){
+        for(let i = 1 ; i <= n_ques ; i++){
             let qnum = "Q"+i;
             newresult.push({
                 Question: qnum,
-                QuestionType: tags.find((tag)=>tag.id===i).type,
+                QuestionType: tags.find((tag)=>tag.id===i)?.types,
                 YourAnswer: resultsheet.find((result)=>result.Id===student_id)[qnum],
                 Correct: calculateRightPercentage(qnum),
                 Wrong: 100-calculateRightPercentage(qnum),

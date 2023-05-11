@@ -16,9 +16,9 @@ function App() {
       {resultsheet && <TagQuestions setN_ques={setN_ques} tags={tags} setTags={setTags}/>}
       <div style={{height:"100px"}}></div>
       {tags?.map((tag) => {
-                return <h1 key={tag.id}>{tag.id} {tag.segment} {tag.type}</h1>
+                return <h1 key={tag.id}>{tag.id} {tag.segments} {tag.types}</h1>
             })}
-      <Export resultsheet={resultsheet} tags={tags}/>
+      <Export resultsheet={resultsheet} tags={tags} n_ques={n_ques}/>
     </div>
   );
 }

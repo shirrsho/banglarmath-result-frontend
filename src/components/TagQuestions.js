@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
+import Select from 'react-select';
 
-function TagQuestions( {setN_ques, tags, setTags} ) {
+function TagQuestions({ setN_ques, tags, setTags }) {
     const [rows, setRows] = useState([]);
-    
+
     const setNumberofQuestions = (value) => {
         setN_ques(value);
         let temp = [];
         for (let i = 0; i < value; i++) {
-            temp.push(i+1);
+            temp.push(i + 1);
         }
         setRows(temp);
     }
@@ -50,41 +51,62 @@ function TagQuestions( {setN_ques, tags, setTags} ) {
         setTags(newTags); // Update the tags state
     }
 
-    const TagRow = ({id}) => {
+    const TagRow = ({ id }) => {
 
-        const [segment, setSegment] = useState();
-        const [type, setType] = useState();
+        const [segments, setSegments] = useState([]);
+        const [types, setTypes] = useState([]);
+
+        const segmentoptions = [
+            { value: 'THEORITICAL KNOWLEDGE', label: 'THEORITICAL KNOWLEDGE' },
+            { value: 'APPLICATION', label: 'APPLICATION' },
+            { value: 'OTHERS', label: 'OTHERS' }
+        ]
+        const typeoptions = [
+            { value: 'Number', label: 'Number' },
+            { value: 'Algebra', label: 'Algebra' },
+            { value: 'Counting', label: 'Counting' },
+            { value: 'Geometry', label: 'Geometry' },
+            { value: 'Calculation', label: 'Calculation' },
+            { value: 'Ability to understand questions', label: 'Ability to understand questions' },
+        ]
 
         const tagAdded = (e) => {
             e.preventDefault()
-            let tag ={
-                id:id,
-                segment:segment,
-                type:type
+            let tag = {
+                id: id,
+                segments: segments.map(segment=>segment.value),
+                types: types.map(type=>type.value)
             }
+            console.log(tag);
             addTag(tag);
         }
 
-        return(
+        const handleSegmentsChange = (segments) => {
+            setSegments(segments);
+        }
+        const handleTypesChange = (types) => {
+            setTypes(types);
+        }
+
+        return (
             <div key={id}>
                 <h3>Question {id}: </h3>
                 <span>
-                    <select id={id} name='segment' onChange={(e)=>setSegment(e.target.value)}>
-                        <option value="Segment Not Specified">Segment Not Specified</option>
-                        <option value="THEORITICAL KNOWLEDGE">THEORITICAL KNOWLEDGE</option>
-                        <option value="APPLICATION">APPLICATION</option>
-                        <option value="OTHERS">OTHERS</option>
-                    </select>
-                    <select id={id} name='type' onChange={(e)=>setType(e.target.value)}>
-                        <option value="Type Not Specified">Type Not Specified</option>
-                        <option value="Number">Number</option>
-                        <option value="Algebra">Algebra</option>
-                        <option value="Counting">Counting</option>
-                        <option value="Geometry">Geometry</option>
-                        <option value="Calculation">Calculation</option>
-                        <option value="Ability to understand questions">Ability to understand questions</option>
-                    </select>
-                    <button onClick={(e)=>tagAdded(e)}>Set</button>
+                    <Select
+                        id={id}
+                        placeholder={tags.filter(tag=>tag.id===id).segments?.toString()||"Add Segments"}
+                        isMulti
+                        options={segmentoptions}
+                        value={segments}
+                        onChange={handleSegmentsChange} />
+                    <Select
+                        id={id}
+                        placeholder={tags.filter(tag=>tag.id===id).types?.toString()||"Add Types"}
+                        isMulti
+                        options={typeoptions}
+                        value={types}
+                        onChange={handleTypesChange} />
+                    <button onClick={(e) => tagAdded(e)}>Set</button>
                 </span>
             </div>
         );
@@ -92,10 +114,10 @@ function TagQuestions( {setN_ques, tags, setTags} ) {
 
     return (
         <div>
-            <input type='number' onChange={(e)=>setNumberofQuestions(e.target.value)}/>
+            <input type='number' onChange={(e) => setNumberofQuestions(e.target.value)} />
             <h4>Tag the questions:</h4>
             {rows.map((row) => {
-                return <TagRow id={row} key={row}/>
+                return <TagRow id={row} key={row} />
             })}
         </div>
     );
