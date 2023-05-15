@@ -43,6 +43,25 @@ function Export( {resultsheet, tags, n_ques} ) {
     }
 
     const exportCsv = () => {
+
+        axios.get(`/result/${id}`)
+        .then((response) => {
+            // Check if the request was successful.
+            if (response.status === 200) {
+            // Get the response data.
+            const data = response.data;
+
+            // Display the data.
+            console.log(data);
+            } else {
+            // Display an error message.
+            console.log("Error: " + response.status);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
         let newresult = []
 
         for(let i = 1 ; i <= n_ques ; i++){

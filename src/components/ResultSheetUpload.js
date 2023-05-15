@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Papa from 'papaparse';
+import axios from 'axios';
 
 function ResultSheetUpload({ setResultsheet }) {
   let file;
@@ -10,8 +11,7 @@ function ResultSheetUpload({ setResultsheet }) {
   }
 
   const convertToJSON = () => {
-    if (file == null) return;
-    Papa.parse(file, {
+      Papa.parse(file, {
       header: true,
       dynamicTyping: true,
       complete: (results) => {
@@ -22,11 +22,38 @@ function ResultSheetUpload({ setResultsheet }) {
     });
   }
 
+  const uploadResultSheet = () => {
+    if (file == null) return;
+    else convertToJSON();
+    axios.post('http://localhost:3001/uploadresultsheet/', jsonData)
+        .then((response) => {
+          console.log('Post successful! ', response.data);
+        })
+        .catch((error) => {
+          console.log('Post failed!');
+        });
+  }
+
+  const uploadQuesInfo = () => {
+    if (file == null) return;
+    else convertToJSON();
+    axios.post('http://localhost:3001/uploadquestioninfo/', jsonData)
+        .then((response) => {
+          console.log('Post successful! ', response.data);
+        })
+        .catch((error) => {
+          console.log('Post failed!');
+        });
+  }
+
   return (
     <div>
-      <h3>Upload the result Sheet in csv. Must be in the standard format.</h3>
+      <h3>Upload the result sheet in csv. Must be in the standard format.</h3>
       <input type='file' onChange={handleFileUpload} />
-      <button onClick={convertToJSON}>Upload</button>
+      <button onClick={uploadResultSheet}>Upload</button>
+      <h3>Upload the questions' information in csv. Must be in the standard format.</h3>
+      <input type='file' onChange={handleFileUpload} />
+      <button onClick={uploadQuesInfo}>Upload</button>
       {jsonData && <p>Successfully Uploaded.</p>}
     </div>
   );
