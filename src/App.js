@@ -6,7 +6,7 @@ import Export from './components/Export';
 function App() {
   const [resultsheet,setResultsheet] = useState();
   const [n_ques, setN_ques] = useState(0);
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState();
 
   return (
     <div>
@@ -15,9 +15,9 @@ function App() {
       <CSVtoJSON setResultsheet={setResultsheet}/>
       {resultsheet && <TagQuestions setN_ques={setN_ques} tags={tags} setTags={setTags}/>}
       <div style={{height:"100px"}}></div>
-      {tags?.map((tag) => {
+      {/* {tags?.map((tag) => {
                 return <h1 key={tag.id}>{tag.id} {tag.segments} {tag.types}</h1>
-            })}
+            })} */}
       <Export resultsheet={resultsheet} tags={tags} n_ques={n_ques}/>
     </div>
   );

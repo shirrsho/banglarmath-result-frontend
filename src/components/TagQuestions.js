@@ -5,9 +5,9 @@ import axios from 'axios';
 function TagQuestions({ setN_ques, tags, setTags }) {
     const [rows, setRows] = useState([]);
 
-    const uploadTags = () => {
+    const uploadTags = async () => {
         console.log("sending: ",tags);
-        axios.post('http://localhost:3001/questiontags/', tags)
+        await axios.post('http://localhost:3001/questiontags/', tags)
         .then((response) => {
           console.log('Post successful! ', response.data);
         })
@@ -26,11 +26,11 @@ function TagQuestions({ setN_ques, tags, setTags }) {
     }
 
     const addTag = (newTag) => {
-        // const updatedTags = tags.filter((tag) => tag.id !== newTag.id); // Remove the tag with the same id
-        // const newTags = [...updatedTags, newTag]; // Append the new tag
-        const newTags = tags;
-        let ind = "Q"+newTag.id;
-        newTags[ind] = newTag;
+        const updatedTags = tags.filter((tag) => tag.id !== newTag.id); // Remove the tag with the same id
+        const newTags = [...updatedTags, newTag]; // Append the new tag
+        // const newTags = tags;
+        // let ind = "Q"+newTag.id;
+        // newTags[ind] = {...newTag};
         setTags(newTags); // Update the tags state
         console.log(tags);
     }
@@ -78,14 +78,14 @@ function TagQuestions({ setN_ques, tags, setTags }) {
                 <span>
                     <Select
                         id={id}
-                        placeholder={tags.filter(tag=>tag.id===id).segments?.toString()||"Add Segments"}
+                        // placeholder={tags?.filter(tag=>tag.id===id).segments?.toString()||"Add Segments"}
                         isMulti
                         options={segmentoptions}
                         value={segments}
                         onChange={handleSegmentsChange} />
                     <Select
                         id={id}
-                        placeholder={tags.filter(tag=>tag.id===id).types?.toString()||"Add Types"}
+                        // placeholder={tags?.filter(tag=>tag.id===id).types?.toString()||"Add Types"}
                         isMulti
                         options={typeoptions}
                         value={types}
@@ -100,7 +100,7 @@ function TagQuestions({ setN_ques, tags, setTags }) {
         <div>
             <input type='number' onChange={(e) => setNumberofQuestions(e.target.value)} />
             <h4>Tag the questions:</h4>
-            {rows.map((row) => {
+            {rows?.map((row) => {
                 return <TagRow id={row} key={row} />
             })}
             <button onClick={uploadTags}>Tag</button>
