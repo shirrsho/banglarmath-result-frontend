@@ -1,28 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
-import axios from 'axios';
 
-function TagQuestions({ setN_ques, tags, setTags }) {
+function TagQuestions({ examinformation, setExaminformation }) {
     const [rows, setRows] = useState([]);
+    const [tags, setTags] = useState([]);
 
     const uploadTags = async () => {
-        console.log("sending: ",tags);
-        await axios.post('http://localhost:3001/questiontags/', tags)
-        .then((response) => {
-          console.log('Post successful! ', response.data);
-        })
-        .catch((error) => {
-          console.log('Post failed!');
-        });
-    }
-
-    const setNumberofQuestions = (value) => {
-        setN_ques(value);
-        let temp = [];
-        for (let i = 0; i < value; i++) {
-            temp.push(i + 1);
-        }
-        setRows(temp);
+        // console.log("sending: ",tags);
+        let e = examinformation;
+        e.tags = tags;
+        setExaminformation(e);
     }
 
     const addTag = (newTag) => {
@@ -32,8 +19,17 @@ function TagQuestions({ setN_ques, tags, setTags }) {
         // let ind = "Q"+newTag.id;
         // newTags[ind] = {...newTag};
         setTags(newTags); // Update the tags state
-        console.log(tags);
+
+        // console.log(tags);
     }
+
+    useEffect(()=>{
+        let temp = [];
+        for (let i = 0; i < examinformation.nques; i++) {
+            temp.push(i + 1);
+        }
+        setRows(temp);
+    },[examinformation.nques])
 
     const TagRow = ({ id }) => {
 
@@ -61,7 +57,7 @@ function TagQuestions({ setN_ques, tags, setTags }) {
                 segments: segments.map(segment=>segment.value),
                 types: types.map(type=>type.value)
             }
-            console.log(tag);
+            // console.log(tag);
             addTag(tag);
         }
 
@@ -98,12 +94,10 @@ function TagQuestions({ setN_ques, tags, setTags }) {
 
     return (
         <div>
-            <input type='number' onChange={(e) => setNumberofQuestions(e.target.value)} />
-            <h4>Tag the questions:</h4>
             {rows?.map((row) => {
                 return <TagRow id={row} key={row} />
             })}
-            <button onClick={uploadTags}>Tag</button>
+            <button onClick={uploadTags}>Confirm Tags</button>
         </div>
     );
 }

@@ -1,63 +1,65 @@
 import React, { useState } from 'react';
 import Papa from 'papaparse';
-import axios from 'axios';
 
-function ResultSheetUpload({ setResultsheet }) {
-  const [file, setFile] = useState();
-  const [jsonData, setJsonData] = useState();
+function ResultSheetUpload({ setExaminformation }) {
+
+  // const [file, setFile] = useState();
+  const [examcode, setExamcode] = useState("");
+  const [examname, setExamname] = useState("");
+  const [jsonResult, setJsonResult] = useState({});
+  const [nques, setNques] = useState(0);
+  let newexamresult;
 
   const handleFileUpload = (event) => {
-    setFile(event.target.files[0]);
+    // setFile(event.target.files[0]);
+    convertToJSON(event.target.files[0]);
   }
 
-  const convertToJSON = () => {
+  const handleHowManyQues = (event) => {
+    setNques(event.target.value);
+  }
+
+  const handleExamCode = (event) => {
+    setExamcode(event.target.value);
+  }
+
+  const handleExamName = (event) => {
+    setExamname(event.target.value);
+  }
+
+  const convertToJSON = (file) => {
     if (file == null) return;
+    console.log("not null");
     Papa.parse(file, {
       header: true,
       dynamicTyping: true,
       complete: (results) => {
         console.log(results.data);
-        uploadResultSheet(results.data)
-        setResultsheet(results.data);
+        setJsonResult(results.data);
       }
     });
   }
 
-  const uploadResultSheet = async (results) => {
-    // if (file == null) return;
-    // else convertToJSON();
-    // console.log(jsonData);
-    await axios.post('http://localhost:3001/uploadresultsheet/', results)
-        .then((response) => {
-          setJsonData(results);
-          console.log('Post successful! ', response.data);
-        })
-        .catch((error) => {
-          console.log('Post failed!');
-        });
+  const addNewResultSheet = () => {
+    /*
+      Check for Invalid Fields
+    */
+    newexamresult = {
+      examname: examname,
+      examcode: examcode,
+      nques: nques,
+      resultsheet: jsonResult
+    }
+    setExaminformation(newexamresult);
   }
 
-  // const uploadQuesInfo = () => {
-  //   if (file == null) return;
-  //   else convertToJSON();
-  //   axios.post('http://localhost:3001/uploadquestioninfo/', jsonData)
-  //       .then((response) => {
-  //         console.log('Post successful! ', response.data);
-  //       })
-  //       .catch((error) => {
-  //         console.log('Post failed!');
-  //       });
-  // }
-
   return (
-    <div>
-      <h3>Upload the result sheet in csv. Must be in the standard format.</h3>
-      <input type='file' onChange={handleFileUpload} />
-      <button onClick={convertToJSON}>Upload</button>
-      {/* <h3>Upload the questions' information in csv. Must be in the standard format.</h3>
-      <input type='file' onChange={handleFileUpload} />
-      <button onClick={uploadQuesInfo}>Upload</button> */}
-      {jsonData && <p>Successfully Uploaded.</p>}
+    <div className='examinformationcomponent'>
+      <label>Exam Code: </label><input type='text' onChange={handleExamCode} /> <br/>
+      <label>Exam Name: </label><input type='text' onChange={handleExamName} /> <br/>
+      <label>Result Sheet (CSV): </label><input type='file' onChange={handleFileUpload} /> <br/>
+      <label>Number of Questions: </label><input type='number' onChange={handleHowManyQues}/> <br/> <br/>
+      <button onClick={addNewResultSheet}>Add New Result Sheet</button>
     </div>
   );
 }
