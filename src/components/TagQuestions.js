@@ -23,13 +23,13 @@ function TagQuestions({ examinformation, setExaminformation }) {
         // console.log(tags);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         let temp = [];
         for (let i = 0; i < examinformation.nques; i++) {
             temp.push(i + 1);
         }
         setRows(temp);
-    },[examinformation.nques])
+    }, [examinformation.nques])
 
     const TagRow = ({ id }) => {
 
@@ -54,8 +54,8 @@ function TagQuestions({ examinformation, setExaminformation }) {
             e.preventDefault()
             let tag = {
                 id: id,
-                segments: segments.map(segment=>segment.value),
-                types: types.map(type=>type.value)
+                segments: segments.map(segment => segment.value),
+                types: types.map(type => type.value)
             }
             // console.log(tag);
             addTag(tag);
@@ -70,8 +70,8 @@ function TagQuestions({ examinformation, setExaminformation }) {
 
         return (
             <div key={id}>
-                <h3>Question {id}: </h3>
-                <span>
+                <span style={{"display":"flex"}}>
+                    <p>Question {id}: </p>
                     <Select
                         id={id}
                         // placeholder={tags?.filter(tag=>tag.id===id).segments?.toString()||"Add Segments"}
@@ -93,12 +93,18 @@ function TagQuestions({ examinformation, setExaminformation }) {
     }
 
     return (
-        <div>
-            {rows?.map((row) => {
-                return <TagRow id={row} key={row} />
-            })}
-            <button onClick={uploadTags}>Confirm Tags</button>
-        </div>
+        <>
+            {
+                examinformation?.nques > 0 ? <div>
+                    {rows?.map((row) => {
+                        return <TagRow id={row} key={row} />
+                    })}
+                    <button onClick={uploadTags}>Confirm Tags</button>
+                </div>
+                    :
+                <></>
+            }
+        </>
     );
 }
 

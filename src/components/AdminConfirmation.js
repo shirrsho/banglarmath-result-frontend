@@ -1,6 +1,9 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function AdminConfirmation({examinformation}){
+
+    const navigate = useNavigate();
 
     const upload = async () => {
         console.log(examinformation);
@@ -8,6 +11,7 @@ function AdminConfirmation({examinformation}){
             .then((response) => {
             // setJsonData(results);
             console.log('Post successful! ', response.data);
+                navigate('/admin/judgingcriterias')
             })
             .catch((error) => {
             console.log('Post failed!');
@@ -15,9 +19,15 @@ function AdminConfirmation({examinformation}){
     }
 
     return(
+        <>
+        { examinformation?.nques!==0 ?
         <div>
-            <button onClick={upload}>Confirm</button>
+            <button onClick={upload}>Upload</button>
         </div>
+        :
+        <></>
+        }
+        </>
     )
 }
 

@@ -2,9 +2,15 @@ import React, { useState } from 'react';
 import Papa from 'papaparse';
 import { saveAs } from 'file-saver';
 import axios from 'axios';
+import Select from 'react-select';
 
 function Export() {
 
+    const [exams, setExams] = useState([
+        { value: 'THEORITICAL KNOWLEDGE', label: 'THEORITICAL KNOWLEDGE' },
+        { value: 'APPLICATION', label: 'APPLICATION' },
+        { value: 'OTHERS', label: 'OTHERS' }
+    ]);
     const [student_id, setStudent_id] = useState();
     const [student_name, setStudent_name] = useState();
 
@@ -37,7 +43,8 @@ function Export() {
     return (
         <div>
             {/* Export CSV Result:<br/><br/> */}
-            <label>Student ID: </label><input onChange={(e)=>setStudent_id(e.target.value)}></input>
+            <label>Exam: </label><Select options={exams}/>
+            <label>Student ID: </label><input onChange={(e)=>setStudent_id(e.target.value)}></input><br/>
             <button onClick={exportCsv}>Export</button>
             <div style={{height:"100px"}}></div>
             {student_name}

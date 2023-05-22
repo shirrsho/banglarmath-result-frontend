@@ -1,7 +1,8 @@
 import React from 'react';
 import Portal from './pages/Portal';
-import AdminPage from './pages/AdminPage';
 import { HashRouter, Routes, Route } from 'react-router-dom';
+import JudgingCriteria from './pages/JudgingCriteria';
+import VerificationPage from './pages/VerificationPage';
 
 function App() {
   // const [resultsheet,setResultsheet] = useState();
@@ -12,7 +13,8 @@ function App() {
     <HashRouter>
         <Routes>
           <Route path="/" element={<Portal />} />
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin" element={<VerificationPage />} />
+          <Route path="/admin/judgingcriterias" element={<JudgingCriteria />} />
         </Routes>
       </HashRouter>
     // <div>

@@ -58,7 +58,7 @@ function ResultSheetUpload({ setExaminformation }) {
       <label>Exam Code: </label><input type='text' onChange={handleExamCode} /> <br/>
       <label>Exam Name: </label><input type='text' onChange={handleExamName} /> <br/>
       <label>Result Sheet (CSV): </label><input type='file' onChange={handleFileUpload} /> <br/>
-      <label>Number of Questions: </label><input type='number' onChange={handleHowManyQues}/> <br/> <br/>
+      <label>Number of Questions: </label><input type='number' onChange={handleHowManyQues}/> <br/>
       <button onClick={addNewResultSheet}>Add New Result Sheet</button>
     </div>
   );

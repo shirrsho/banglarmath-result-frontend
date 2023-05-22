@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ResultSheetUpload from "../components/ResultSheetUpload";
 import TagQuestions from "../components/TagQuestions";
-import AdminConfirmation from "./AdminConfirmation";
+import AdminConfirmation from "../components/AdminConfirmation";
 
 function AdminPage(){
 
