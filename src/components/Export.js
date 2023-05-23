@@ -12,19 +12,20 @@ function Export() {
         { value: 'OTHERS', label: 'OTHERS' }
     ]);
     const [student_id, setStudent_id] = useState();
+    const [examcode, setExamcode] = useState();
     const [student_name, setStudent_name] = useState();
 
     const exportCsv = async () => {
 
         let newresult = []
 
-        await axios.get(`http://localhost:3001/result/${student_id}`)
+        await axios.get(`http://localhost:3001/result/${examcode}/${student_id}`)
         .then((response) => {
             // Check if the request was successful.
             if (response.status === 200) {
                 console.log(response.data)
                 const data = response.data;
-                setStudent_name(data.Name)
+                setStudent_name(data.studentresult.Name)
                 newresult = data.studentresult;
                 // Display the data.
                 console.log(data);
@@ -43,8 +44,9 @@ function Export() {
     return (
         <div>
             {/* Export CSV Result:<br/><br/> */}
-            <label>Exam: </label><Select options={exams}/>
-            <label>Student ID: </label><input onChange={(e)=>setStudent_id(e.target.value)}></input><br/>
+            <label>Exam: </label> <input type='text' onChange={(e)=>setExamcode(e.target.value)}/><br/>
+            {/* <Select options={exams}/> */}
+            <label>Student ID: </label><input onChange={(e)=>setStudent_id(e.target.value)}/><br/>
             <button onClick={exportCsv}>Export</button>
             <div style={{height:"100px"}}></div>
             {student_name}
