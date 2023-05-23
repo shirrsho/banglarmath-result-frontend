@@ -8,11 +8,33 @@ function JudgingCriteria() {
     const [rows, setRows] = useState([]);
     const [criterias, setCriterias] = useState([]);
     const [examcode, setExamcode] = useState()
-    const [exams, setExams] = useState([
-        { value: 'exam code', label: 'exam name' },
-        { value: 'APPLICATION', label: 'APPLICATION' },
-        { value: 'OTHERS', label: 'OTHERS' }
-    ]);
+    const [exams, setExams] = useState([]);
+
+    const getExams = async () => {
+        let texams = []
+
+        await axios.get(`http://localhost:3001/exams`)
+        .then((response) => {
+            // Check if the request was successful.
+            if (response.status === 200) {
+                // console.log(response.data)
+                const data = response.data;
+                data.infos.forEach(element => {
+                    texams.push({
+                        value:element.examcode,
+                        label:element.examcode+'-'+element.examname
+                    })
+                });
+                setExams(texams);
+            } else {
+                // Display an error message.
+                console.log("Error: " + response.status);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
 
     const uploadCriterias = async () => {
         console.log(criterias);
@@ -45,6 +67,10 @@ function JudgingCriteria() {
     useEffect(()=>{
         setRows([...rows, rows.length]);
     },[criterias])
+
+    useEffect(()=>{
+        getExams()
+    },[]);
 
     const TagRow = () => {
 
