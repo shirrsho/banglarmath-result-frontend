@@ -3,6 +3,71 @@ import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import axios from 'axios';
 
+const TagRow = ( {addCriteria} ) => {
+
+    const [segment, setSegment] = useState();
+    const [type, setType] = useState();
+    const [furnishThreshold, setFurnishThreshold] = useState();
+    const [learnThreshold, setLearnThreshold] = useState();
+
+    const segmentoptions = [
+        { value: 'THEORITICAL KNOWLEDGE', label: 'THEORITICAL KNOWLEDGE' },
+        { value: 'APPLICATION', label: 'APPLICATION' },
+        { value: 'OTHERS', label: 'OTHERS' }
+    ]
+    const typeoptions = [
+        { value: 'Number', label: 'Number' },
+        { value: 'Algebra', label: 'Algebra' },
+        { value: 'Counting', label: 'Counting' },
+        { value: 'Geometry', label: 'Geometry' },
+        { value: 'Calculation', label: 'Calculation' },
+        { value: 'Ability to understand questions', label: 'Ability to understand questions' },
+    ]
+
+    const addcriteria = (e) => {
+        e.preventDefault()
+        let criteria = {
+            segment: segment?.value,
+            type: type?.value,
+            furnishThreshold: furnishThreshold,
+            learnThreshold: learnThreshold
+        }
+        // console.log(tag);
+        addCriteria(criteria);
+    }
+
+    const handleSegmentChange = (segment) => {
+        setSegment(segment);
+    }
+    const handleTypeChange = (type) => {
+        setType(type);
+    }
+    const handleFurnishChange = (event) => {
+        setFurnishThreshold(event.target.value);
+    }
+    const handleLearnChange = (event) => {
+        setLearnThreshold(event.target.value);
+    }
+
+    return (
+        <div>
+            <span style={{"display":"flex"}}>
+                <Select
+                    options={segmentoptions}
+                    value={segment}
+                    onChange={handleSegmentChange} />
+                <Select
+                    options={typeoptions}
+                    value={type}
+                    onChange={handleTypeChange} />
+                <input type='number' placeholder='Threshold (Furnish)' onChange={handleFurnishChange}/>
+                <input type='number' placeholder='Threshold (Learn)' onChange={handleLearnChange}/>
+                <button onClick={(e) => addcriteria(e)}>Set</button>
+            </span>
+        </div>
+    );
+}
+
 function JudgingCriteria() {
     const navigate = useNavigate();
     const [rows, setRows] = useState([]);
@@ -65,80 +130,12 @@ function JudgingCriteria() {
     }
 
     useEffect(()=>{
-        setRows([...rows, rows.length]);
+        setRows([...rows, rows.length+1]);
     },[criterias])
 
     useEffect(()=>{
         getExams()
     },[]);
-
-    const TagRow = () => {
-
-        const [segment, setSegment] = useState();
-        const [type, setType] = useState();
-        const [furnishThreshold, setFurnishThreshold] = useState();
-        const [learnThreshold, setLearnThreshold] = useState();
-
-        const segmentoptions = [
-            { value: 'THEORITICAL KNOWLEDGE', label: 'THEORITICAL KNOWLEDGE' },
-            { value: 'APPLICATION', label: 'APPLICATION' },
-            { value: 'OTHERS', label: 'OTHERS' }
-        ]
-        const typeoptions = [
-            { value: 'Number', label: 'Number' },
-            { value: 'Algebra', label: 'Algebra' },
-            { value: 'Counting', label: 'Counting' },
-            { value: 'Geometry', label: 'Geometry' },
-            { value: 'Calculation', label: 'Calculation' },
-            { value: 'Ability to understand questions', label: 'Ability to understand questions' },
-        ]
-
-        const addcriteria = (e) => {
-            e.preventDefault()
-            let criteria = {
-                // id: id,
-                segment: segment?.value,
-                type: type?.value,
-                furnishThreshold: furnishThreshold,
-                learnThreshold: learnThreshold
-            }
-            // console.log(tag);
-            addCriteria(criteria);
-        }
-
-        const handleSegmentChange = (segment) => {
-            setSegment(segment);
-        }
-        const handleTypeChange = (type) => {
-            setType(type);
-        }
-        const handleFurnishChange = (event) => {
-            setFurnishThreshold(event.target.value);
-        }
-        const handleLearnChange = (event) => {
-            setLearnThreshold(event.target.value);
-        }
-
-        return (
-            <div>
-                <span style={{"display":"flex"}}>
-                    <Select
-                        placeholder={segment?.value}
-                        options={segmentoptions}
-                        value={segment}
-                        onChange={handleSegmentChange} />
-                    <Select
-                        placeholder={type?.value}
-                        options={typeoptions}
-                        value={type}
-                        onChange={handleTypeChange} />
-                    <input type='number' placeholder='Threshold (Furnish)' onChange={handleFurnishChange}/>
-                    <input type='number' placeholder='Threshold (Learn)' onChange={handleLearnChange}/>
-                    <button onClick={(e) => addcriteria(e)}>Set</button>
-                </span>
-            </div>
-        );
-    }
 
     return (
         <div>
@@ -147,7 +144,7 @@ function JudgingCriteria() {
                 onChange={setexamcode}
             />
             {rows?.map((row) => {
-                return <TagRow key={row} />
+                return <TagRow key={row} addCriteria={addCriteria}/>
             })}
             <button onClick={uploadCriterias}>Set Judging Criterias</button>
         </div>
